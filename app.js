@@ -29,6 +29,7 @@ app.get('/api/v1/tours', (req, res) => {
 
 app.get('/api/v1/tours/:id', (req, res) => {
   console.log(req.params);
+<<<<<<< HEAD
   const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
   const tour = tours.find((el) => el.id === id); // variables defined in the url are in params
 
@@ -39,6 +40,22 @@ app.get('/api/v1/tours/:id', (req, res) => {
   res.status(200).json({
     status: 'success',
     data: { tour }, // same as tour:tour
+=======
+  const id = req.params.id * 1;// another way of converting a string to a number is to multiply a string by the number 1
+  const tour = tours.find(el => el.id === id)// variables defined in the url are in params
+// if there is no mathing id const tour wld end up undefined
+  //if (id > tours.length)
+  if (!tour)
+   {
+    return res.status(404).json({status : 'fail',
+    message: `tour ${id} does not exist`
+  })
+  } 
+  res
+    .status(200)
+    .json({ status: 'success', 
+    data: { tour}   // same as tour:tour
+>>>>>>> 98fc40981e7c9c5151783ceb001bf5a215b1d2f6
   });
 });
 
@@ -51,7 +68,7 @@ app.post('/api/v1/tours', (req, res) => {
   fs.writeFile(
     `${__dirname}/dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
-    (err) => {
+    err => {
       res
         .status(201) // 201 means created
         .json({ status: 'success', data: { tour: newTour } });

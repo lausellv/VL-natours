@@ -20,30 +20,30 @@ const tours = JSON.parse(
 app.get('/api/v1/tours', (req, res) => {
   res
     .status(200)
-    .json({ status: 'success', results: tours.length, data: { tours: tours } });
+    .json({
+      status: 'success',
+      results: tours.length,
+      data: { tours /*cld be tourNumber . I decide the key value*/: tours },
+    }); // ES6 we don't need to specify key and value if they have the same name
 });
 
 app.get('/api/v1/tours/:id', (req, res) => {
   console.log(req.params);
-  const id = req.params.id * 1;// another way of converting a string to a number is to multiply a string by the number 1
-  const tour = tours.find(el => el.id === id)// variables defined in the url are in params
+  const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
+  const tour = tours.find((el) => el.id === id); // variables defined in the url are in params
 
   //if (id > tours.length)
-  if (!tour)
-   {
-    return res.status(404).json({status : 'fail',
-    message: 'invalid id'
-  })
-  } 
-  res
-    .status(200)
-    .json({ status: 'success', 
-    data: { tour}   // same as tour:tour
+  if (!tour) {
+    return res.status(404).json({ status: 'fail', message: 'invalid id' });
+  }
+  res.status(200).json({
+    status: 'success',
+    data: { tour }, // same as tour:tour
   });
 });
 
 app.post('/api/v1/tours', (req, res) => {
-  //console.log(req.body);
+  console.log(req.body);
 
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);

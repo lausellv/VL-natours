@@ -30,13 +30,23 @@ const tours = JSON.parse(
 const getAllTours = (req, res) => {
   res
     .status(200)
+<<<<<<< HEAD
     .json({ status: 'success',
     requested: req.requestTime, results: tours.length, data: { tours: tours } });
 };
+=======
+    .json({
+      status: 'success',
+      results: tours.length,
+      data: { tours /*cld be tourNumber . I decide the key value*/: tours },
+    }); // ES6 we don't need to specify key and value if they have the same name
+});
+>>>>>>> 76a9a584353735b578085b62c177977d5c5ab4dc
 
 const getTour = (req, res) => {
   console.log(req.params);
   const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
+<<<<<<< HEAD
   const tour = tours.find((el) => el.id === id); // variables defined in the url are in params
   // if there is no mathing id const tour wld end up undefined
   //if (id > tours.length)
@@ -48,11 +58,33 @@ const getTour = (req, res) => {
   res.status(200).json({
     status: 'success',
     data: { tour }, // same as tour:tour
+=======
+  const tour = tours.find(el => el.id === id)// variables defined in the url are in params
+
+// if there is no mathing id const tour wld end up undefined
+  //if (id > tours.length)
+  if (!tour)
+   {
+    return res.status(404).json({status : 'fail',
+    message: `tour ${id} does not exist`
+  })
+  } 
+  res
+    .status(200)
+    .json({ status: 'success', 
+    data: { tour}   // same as tour:tour
+
+>>>>>>> 76a9a584353735b578085b62c177977d5c5ab4dc
   });
 };
 
+<<<<<<< HEAD
 const createTour = (req, res) => {
   //console.log(req.body);
+=======
+app.post('/api/v1/tours', (req, res) => {
+  console.log(req.body);
+>>>>>>> 76a9a584353735b578085b62c177977d5c5ab4dc
 
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);

@@ -37,6 +37,23 @@ const getAllTours = (req, res) => {
     }); // ES6 we don't need to specify key and value if they have the same name
 };
 
+const createTour = (req, res) => {
+  console.log(req.body);
+
+  const newId = tours[tours.length - 1].id + 1;
+  const newTour = Object.assign({ id: newId }, req.body);
+  tours.push(newTour);
+  fs.writeFile(
+    `${__dirname}/dev-data/data/tours-simple.json`,
+    JSON.stringify(tours),
+    (err) => {
+      res
+        .status(201) // 201 means created
+        .json({ status: 'success', data: { tour: newTour } });
+    }
+  );
+};
+
 const getTour = (req, res) => {
   console.log(req.params);
   const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
@@ -58,22 +75,7 @@ const getTour = (req, res) => {
   });
 };
 
-app.post('/api/v1/tours', (req, res) => {
-  console.log(req.body);
 
-  const newId = tours[tours.length - 1].id + 1;
-  const newTour = Object.assign({ id: newId }, req.body);
-  tours.push(newTour);
-  fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
-    (err) => {
-      res
-        .status(201) // 201 means created
-        .json({ status: 'success', data: { tour: newTour } });
-    }
-  );
-});
 
 const updateTour = (req, res) => {
   const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
@@ -120,6 +122,7 @@ const deleteTour = (req, res) => {
 // 3) ROUTES
 
 //app.get('/api/v1/tours', getAllTours);
+//app.post('/api/v1/tours', createTour );
 //app.post('/api/v1/tours', createTour);
 // app.get('/api/v1/tours/:id', getTour);
 // app.patch('/api/v1/tours/:id', updateTour);

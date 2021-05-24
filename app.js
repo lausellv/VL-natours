@@ -27,11 +27,11 @@ app.use((req, res, next) => {
 
 
 // 3) ROUTES
-
+// this is where we mount our routers
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
-// 4) SERVER
+// 4) START SERVER
 
 const PORT = 3000;
 app.listen(PORT, '127.0.0.1', () => {

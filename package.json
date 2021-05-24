@@ -11,13 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-<<<<<<< HEAD
     "morgan": "^1.10.0",
     "nodemon": "^2.0.7"
-=======
-    "global": "^4.4.0",
-    "nodemon": "^2.0.7",
-    "yarn": "^1.22.10"
->>>>>>> 76a9a584353735b578085b62c177977d5c5ab4dc
   }
 }

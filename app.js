@@ -1,48 +1,57 @@
 const fs = require('fs');
 const express = require('express');
+const morgan = require('morgan');
+const { create } = require('domain');
 
 const app = express();
-app.use(express.json()); // middlewar is added to express
 
-// app.get('/', (req, res) => {
-//   res
-//     .status(200)  // default status
-//     .json({ message: 'Hello from the server side', app: 'Natours' });
-// });
+// 1) MIDDLEWARES
 
-// app.post('/', (req, res)=>{
-//   res.send('you can post to this endpoint')
-// })
+app.use(morgan('dev'));
+app.use(express.json()); // middleware is added to express (ie express json)
+
+// we can create our own middleware function
+app.use((req, res, next)=>{
+  console.log('hello from the middleware 😁')
+  next();
+})
+
+app.use((req, res, next)=>{
+  req.requestTime = new Date().toISOString();
+  console.log(`requestedAt: ${req.requestTime}`)
+  next();
+})
 const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`) // no problem running this code here bc it's non-blocking
 );
 
-app.get('/api/v1/tours', (req, res) => {
+
+// 2) ROUTE HANDLERS
+const getAllTours = (req, res) => {
   res
     .status(200)
-    .json({ status: 'success', results: tours.length, data: { tours: tours } });
-});
+    .json({ status: 'success',
+    requested: req.requestTime, results: tours.length, data: { tours: tours } });
+};
 
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTour = (req, res) => {
   console.log(req.params);
-  const id = req.params.id * 1;// another way of converting a string to a number is to multiply a string by the number 1
-  const tour = tours.find(el => el.id === id)// variables defined in the url are in params
-// if there is no mathing id const tour wld end up undefined
+  const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
+  const tour = tours.find((el) => el.id === id); // variables defined in the url are in params
+  // if there is no mathing id const tour wld end up undefined
   //if (id > tours.length)
-  if (!tour)
-   {
-    return res.status(404).json({status : 'fail',
-    message: `tour ${id} does not exist`
-  })
-  } 
-  res
-    .status(200)
-    .json({ status: 'success', 
-    data: { tour}   // same as tour:tour
+  if (!tour) {
+    return res
+      .status(404)
+      .json({ status: 'fail', message: `tour ${id} does not exist` });
+  }
+  res.status(200).json({
+    status: 'success',
+    data: { tour }, // same as tour:tour
   });
-});
+};
 
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
   //console.log(req.body);
 
   const newId = tours[tours.length - 1].id + 1;
@@ -51,13 +60,74 @@ app.post('/api/v1/tours', (req, res) => {
   fs.writeFile(
     `${__dirname}/dev-data/data/tours-simple.json`,
     JSON.stringify(tours),
-    err => {
+    (err) => {
       res
         .status(201) // 201 means created
         .json({ status: 'success', data: { tour: newTour } });
     }
   );
-});
+};
+
+const updateTour = (req, res) => {
+  const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
+  const tour = tours.find((el) => el.id === id);
+  if (!tour) {
+    return res
+      .status(404)
+      .json({ status: 'failed', message: `Tour ${id} does not exist` });
+  }
+
+  const updatedTour = Object.assign(tour, req.body);
+  fs.writeFile(
+    `${__dirname}/dev-data/data/tours-simple.json`,
+    JSON.stringify(tours),
+    (err) => {
+      res
+        .status(201) // 201 means created
+        .json({ status: 'success', data: { tour: updatedTour } });
+    }
+  );
+};
+
+const deleteTour = (req, res) => {
+  const id = parseInt(req.params.id); // another way of converting a string to a number is to multiply a string by the number 1
+  const tour = tours.find((el) => el.id === id);
+  if (!tour) {
+    return res
+      .status(404)
+      .json({ status: 'failed', message: `Tour ${id} does not exist` });
+  }
+
+  const updatedTours = tours.filter((el) => el.id !== tour.id);
+  fs.writeFile(
+    `${__dirname}/dev-data/data/tours-simple.json`,
+    JSON.stringify(updatedTours),
+    (err) => {
+      return res
+        .status(204) // 204 means deleted
+        .json({ status: 'success', message: `Tour ${id} was deleted ` });
+    }
+  );
+};
+
+// 3) ROUTES
+
+//app.get('/api/v1/tours', getAllTours);
+//app.post('/api/v1/tours', createTour);
+// app.get('/api/v1/tours/:id', getTour);
+// app.patch('/api/v1/tours/:id', updateTour);
+// app.delete('/api/v1/tours/:id', deleteTour);
+
+app.route('/api/v1/tours').get(getAllTours).post(createTour);
+
+app
+  .route('/api/v1/tours/:id')
+  .get(getTour)
+  .patch(updateTour)
+  .delete(deleteTour);
+
+
+  // 4) SERVER
 
 const PORT = 3000;
 app.listen(PORT, '127.0.0.1', () => {

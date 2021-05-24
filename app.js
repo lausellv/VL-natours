@@ -35,7 +35,7 @@ const getAllTours = (req, res) => {
       results: tours.length,
       data: { tours /*cld be tourNumber . I decide the key value*/: tours },
     }); // ES6 we don't need to specify key and value if they have the same name
-});
+};
 
 const getTour = (req, res) => {
   console.log(req.params);
@@ -73,7 +73,7 @@ app.post('/api/v1/tours', (req, res) => {
         .json({ status: 'success', data: { tour: newTour } });
     }
   );
-};
+});
 
 const updateTour = (req, res) => {
   const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1

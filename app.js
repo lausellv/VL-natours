@@ -7,9 +7,9 @@ const { create } = require('domain');
 
 const app = express();
 
-// 1) MIDDLEWARE
+// 1) MIDDLEWAREs
+if (process.env.NODE_ENV === 'development'){app.use(morgan('dev'));}
 
-app.use(morgan('dev'));
 app.use(express.json()); // middleware is added to express (ie express json)
 app.use(express.static(`${__dirname}/public`));
 // we can create our own middleware function

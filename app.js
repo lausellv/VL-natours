@@ -11,7 +11,7 @@ const app = express();
 
 app.use(morgan('dev'));
 app.use(express.json()); // middleware is added to express (ie express json)
-
+app.use(express.static(`${__dirname}/public`));
 // we can create our own middleware function
 app.use((req, res, next) => {
   console.log('hello from the middleware 😁');

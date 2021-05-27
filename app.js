@@ -7,7 +7,7 @@ const { create } = require('domain');
 
 const app = express();
 
-// 1) MIDDLEWARES
+// 1) MIDDLEWARE
 
 app.use(morgan('dev'));
 app.use(express.json()); // middleware is added to express (ie express json)

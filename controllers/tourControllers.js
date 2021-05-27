@@ -1,6 +1,23 @@
 const fs = require('fs');
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`));
 
+exports.checkID = (req, res, next, val)=>{
+  console.log(`tour id is ${val}`);
+  if(req.params.id *1 > tours.length){
+    return res.status(404).json({message:'Invalid ID', status: 'fail'})
+  }
+  next();
+}
+
+exports.checkBody = (req, res, next)=>{
+  
+  if ( !req.body.name || !req.body.price) {
+    return res.status(404).json({status: "fail", message: "Missing tour name or price"})
+  } 
+  
+  next();
+}
+
 
 exports.getAllTours = (req, res) => {
   res.status(200).json({
@@ -11,7 +28,7 @@ exports.getAllTours = (req, res) => {
 };
 
 exports.createTour = (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);
@@ -29,16 +46,10 @@ exports.createTour = (req, res) => {
 
 exports.getTour = (req, res) => {
   console.log(req.params);
-  const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
+ const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
   const tour = tours.find((el) => el.id === id); // variables defined in the url are in params
 
-  // if there is no mathing id const tour wld end up undefined
-  //if (id > tours.length)
-  if (!tour) {
-    return res
-      .status(404)
-      .json({ status: 'fail', message: `tour ${id} does not exist` });
-  }
+ 
   res.status(200).json({
     status: 'success',
     data: { tour }, // same as tour:tour
@@ -46,14 +57,8 @@ exports.getTour = (req, res) => {
 };
 
 exports.updateTour = (req, res) => {
-  const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
-  const tour = tours.find((el) => el.id === id);
-  if (!tour) {
-    return res
-      .status(404)
-      .json({ status: 'failed', message: `Tour ${id} does not exist` });
-  }
-
+ const id = req.params.id * 1; // another way of converting a string to a number is to multiply a string by the number 1
+const tour = tours.find((el) => el.id === id);
   const updatedTour = Object.assign(tour, req.body);
   fs.writeFile(
     `${__dirname}/dev-data/data/tours-simple.json`,
@@ -69,11 +74,11 @@ exports.updateTour = (req, res) => {
 exports.deleteTour = (req, res) => {
   const id = parseInt(req.params.id); // another way of converting a string to a number is to multiply a string by the number 1
   const tour = tours.find((el) => el.id === id);
-  if (!tour) {
-    return res
-      .status(404)
-      .json({ status: 'failed', message: `Tour ${id} does not exist` });
-  }
+  // if (!tour) {
+  //   return res
+  //     .status(404)
+  //     .json({ status: 'failed', message: `Tour ${id} does not exist` });
+  // }
 
   const updatedTours = tours.filter((el) => el.id !== tour.id);
   fs.writeFile(

@@ -8,7 +8,7 @@ const { create } = require('domain');
 const app = express();
 
 // 1) MIDDLEWAREs
-if (process.env.NODE_ENV === 'development'){app.use(morgan('dev'));}
+if (process.env.NODE_ENV === 'development'){app.use(morgan('dev'));}  // this is available in every single process
 
 app.use(express.json()); // middleware is added to express (ie express json)
 app.use(express.static(`${__dirname}/public`));

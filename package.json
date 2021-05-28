@@ -4,7 +4,8 @@
   "description": "learning node, express and mongodb",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server"
+    "start": "nodemon server",
+    "start:dev":"SET NODE_ENV=development&&nodemon server.js"
   },
   "author": "Victor",
   "license": "ISC",

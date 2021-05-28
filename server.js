@@ -1,6 +1,8 @@
 const dotenv = require('dotenv');
 dotenv.config({path:'./config.env'})
 const app = require('./app');
+//console.log(app.get('env')) // environment variables are global variables that define the environment where the node app is running.
+console.log(process.env) // node.js enviroment variables 
 
 // console.log(process.env);
 const PORT = process.env.PORT || 3000;

@@ -2,9 +2,9 @@
   "name": "vl-natours",
   "version": "1.0.0",
   "description": "learning node, express and mongodb",
-  "main": "app.js",
+  "main": "app6.js",
   "scripts": {
-    "start": "nodemon server",
+    "start": "nodemon server2",
     "start:dev": "SET NODE_ENV=development&&nodemon server.js",
     "start:prod": "SET NODE_ENV=production&&nodemon server.js"
   },

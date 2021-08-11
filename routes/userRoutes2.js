@@ -3,6 +3,7 @@ const {getUsers, createUser, getUser, updateUser, deleteUser} = require(`${__dir
 const router = express.Router();
 
 
+
 router
   .route('/')
   .get(getUsers)

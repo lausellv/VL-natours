@@ -1,18 +1,21 @@
 const express = require('express');
+
 const app = express();
 const morgan = require('morgan');
-const tourRouter = require(`${__dirname}/routes/tourRoutes2`);
-const userRouter = require(`${__dirname}/routes/userRoutes2`);
+
+
+const tourRouter = require(`${__dirname}/routes/tourRoutes2`); // eslint-disable-line import/no-dynamic-require
+const userRouter = require(`${__dirname}/routes/userRoutes2`); // eslint-disable-line import/no-dynamic-require
 
 //MIDDLEWARES
-if(process.env.NODE_ENV==='development'){
+if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 app.use((req, res, next) => {
-  console.log('hello from the middleware 😀');
+ // console.log('hello from the middleware 😀');
   next();
 });
 

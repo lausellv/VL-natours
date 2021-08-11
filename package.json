@@ -5,8 +5,8 @@
   "main": "app6.js",
   "scripts": {
     "start": "nodemon server2",
-    "start:dev": "SET NODE_ENV=development&&nodemon server2.js",
-    "start:prod": "SET NODE_ENV=production&&nodemon server2.js"
+    "start:dev": "nodemon server2.js",
+    "start:prod": "set NODE_ENV=production&&nodemon server2.js"
   },
   "author": "Victor",
   "license": "ISC",

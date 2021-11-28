@@ -19,6 +19,8 @@ mongoose
     console.log('DB connnection succesful!');
   });
 
+// setting up mongoose Schema and model
+//schemaType options included
 const tourSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -29,13 +31,16 @@ const tourSchema = new mongoose.Schema({
   price: { type: Number, required: [true, 'tour must include price'] }
 });
 
+// convention is to use capital letter to name a model
 const Tour = mongoose.model('Tour', tourSchema);
 
 const testTour = new Tour({
-  name: 'The Park Campers',
-  price: 499
+  name: 'The SeaShell Campers',
+  rating: 4.6,
+  price: 300
 });
 
+// the save method returns a promise / for now we'll use the then method
 testTour
   .save()
   .then(doc => {
